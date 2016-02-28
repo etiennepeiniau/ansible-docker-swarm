@@ -1,0 +1,43 @@
+---
+- hosts:  tag_Type_consul[0]
+  name: Install Consul Cluster
+  sudo: true
+  vars:
+    - ansible_distribution_major_version: 6 # aws AMI does not declare major version
+  roles:
+    - role: savagegus.consul
+      consul_version: 0.6.3
+      consul_node_name: consul0
+      consul_bind_address: "{{ ansible_default_ipv4['address'] }}"
+      consul_datacenter: "{{ ec2_region }}"
+      consul_use_initd: true
+      consul_use_upstart: false
+      # servers
+      consul_is_server: true
+      consul_bootstrap_expect: 5
+      # consul ui
+      consul_is_ui: true
+      consul_ui_server_name: "{{ inventory_hostname }}" # nginx server configuration
+      nginx_user: nginx # force to the correct user
+
+- hosts:  tag_Type_consul[1:]
+  name: Install Consul Cluster
+  sudo: true
+  vars:
+    - ansible_distribution_major_version: 6 # aws AMI does not declare major version
+  roles:
+    - role: savagegus.consul
+      consul_version: 0.6.3
+      consul_node_name: "consul{{ groups.tag_Type_consul.index(inventory_hostname) }}"
+      consul_bind_address: "{{ ansible_default_ipv4['address'] }}"
+      consul_datacenter: "{{ ec2_region }}"
+      consul_use_initd: true
+      consul_use_upstart: false
+      # servers
+      consul_is_server: true
+      consul_bootstrap_expect: 5
+      # dependencies
+      nginx_user: nginx # force to the correct user
+  tasks:
+      - name: Join the cluster
+        command: "/opt/consul/bin/consul join {{ hostvars[groups.tag_Type_consul[0]].ec2_private_ip_address }}"
