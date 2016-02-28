@@ -1,0 +1,26 @@
+---
+- hosts:  tag_Name_common
+  name: Install common linux tools
+  sudo: true
+  tasks:
+    - name: Upgrade all packages
+      yum: name=* state=latest
+    # Navigation
+    - name: Install tree
+      yum: name=tree state=latest
+    # Monitoring
+    - name: Install htop
+      yum: name=htop state=latest
+    - name: Install iotop
+      yum: name=iotop state=latest
+    - name: Install iostat
+      yum: name=sysstat state=latest
+    - name: Install iptraf
+      yum: name=iptraf state=latest
+    - name: Install tcpdump
+      yum: name=tcpdump state=latest
+    # Source
+    - name: Install git
+      yum: name=git state=latest
+    - name: Install tig
+      yum: name=tig state=latest
