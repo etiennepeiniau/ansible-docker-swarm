@@ -1,0 +1,24 @@
+---
+- name: Add Docker GPG key.
+  rpm_key:
+    key: https://yum.dockerproject.org/gpg
+    state: present
+
+- name: Add Docker repository.
+  copy:
+    src: docker.repo
+    dest: /etc/yum.repos.d/docker.repo
+    mode: 0644
+
+- name: Install Docker.
+  yum: pkg=docker state=installed
+
+- name: Start Docker.
+  service: name=docker state=started enabled=yes
+
+- name: Daemonize Docker.
+  command: chkconfig docker on
+
+- name: Add user to docker group
+  user: "name={{ docker_user}} append=yes groups=docker"
+

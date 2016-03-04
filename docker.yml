@@ -1,0 +1,6 @@
+- hosts:  tag_Name_docker
+  name: Install Docker
+  become: yes
+  become_method: sudo
+  roles:
+    - role: docker
