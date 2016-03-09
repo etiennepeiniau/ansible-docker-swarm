@@ -16,8 +16,7 @@
       # servers
       consul_is_server: true
       consul_bootstrap_expect: 3
-      consul_dynamic_bind: true
-      consul_client_address: 0.0.0.0
+      consul_client_address: 0.0.0.0 # secure by vpc access
       # consul ui
       consul_is_ui: true
       consul_ui_server_name: "{{ inventory_hostname }}" # nginx server configuration
@@ -40,8 +39,7 @@
       # servers
       consul_is_server: true
       consul_bootstrap_expect: 3
-      consul_dynamic_bind: true
-      consul_client_address: 0.0.0.0
+      consul_client_address: 0.0.0.0 # secure by vpc access
       # dependencies
       nginx_user: nginx # force to the correct user
   tasks:
