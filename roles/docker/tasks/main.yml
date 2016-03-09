@@ -22,3 +22,12 @@
 - name: Add user to docker group
   user: "name={{ docker_user}} append=yes groups=docker"
 
+- name: Expose docker to port 2375
+  template:
+    src: docker.j2
+    dest: /etc/sysconfig/docker
+    owner: root
+    group: root
+    mode: 0644
+  when: docker_expose
+  notify: restart docker
